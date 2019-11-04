@@ -1,0 +1,25 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:datePickerDialogTheme">@style/datePickerTheme</item>
+        <item name="android:timePickerDialogTheme">@style/timePickerTheme</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:background">@drawable/background_splash</item>
+    </style>
+
+    <style name="datePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#243039</item>
+        <item name="colorControlActivated">#21AABE</item>
+        <item name="colorControlHighlight">#21AABE</item>
+    </style>
+
+    <style name="timePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#243039</item>
+    </style>
+
+</resources>

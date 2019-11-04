@@ -1,0 +1,30 @@
+[
+  {
+    "key": "ORIGINAL THEME",
+    "backgroundColor": "#ffc107",
+    "color": "#243039",
+    "textColor": "#000000",
+    "anotherTextColor": "#243039",
+    "buttonColor" : "#21AABE",
+    "buttonTextColor" : "#F5F5F5",
+    "iconColor": "#000000",
+    "formColor": "#415868",
+    "formLabel": "#000000",
+    "formInput": "#000000",
+    "drawerNavigator": "#ffc107"
+  },
+  {
+    "key": "GRAY THEME",
+    "backgroundColor": "#8B93A0",
+    "color": "#22364F",
+    "textColor": "#F5F5F5",
+    "anotherTextColor": "#F5F5F5",
+    "buttonColor": "#2EBEE5",
+    "buttonTextColor" : "#F5F5F5",
+    "iconColor": "#22364F",
+    "formColor": "#8B93A0",
+    "formLabel": "#22364F",
+    "formInput": "#22364F",
+    "drawerNavigator": "#22364F"
+  }
+]
