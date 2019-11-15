@@ -1,12 +1,12 @@
 /* Imports */
 import React from 'react';
-import { Text, FlatList, View, Image } from 'react-native';
+import {View, Image, Text, FlatList, ActivityIndicator} from 'react-native';
 import SearchBar from 'react-native-searchbar';
 import CheckBox from 'react-native-check-box';
-import { Container, Content, ListItem, List } from 'native-base';
+import { ListItem, Content, List, Container } from 'native-base';
+import { styles } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign } from '@app/utils/Icons';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -16,7 +16,8 @@ class searchToolWorker extends React.Component {
         super(props);
 
         this.state = {
-            data: []
+            data: [],
+            isLoading: true
         };
 
         this.arrayholder = [];
@@ -28,7 +29,7 @@ class searchToolWorker extends React.Component {
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_tools_workers JOIN table_tools ON table_tools.tool_id = table_tools_workers.tool_id JOIN table_worker ON table_worker.worker_id = table_tools_workers.worker_id', [], (tx, results) => {
                 let rows = results.rows.raw();
-                this.setState({ data: rows });
+                this.setState({ data: rows, isLoading: false });
                 this.arrayholder = rows;
             })
         });
@@ -114,7 +115,7 @@ class searchToolWorker extends React.Component {
         if (this.state.data.length > 0) {
             return (
                 <List style={custom.PartListSearch}>
-                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={this._keyExtractor.bind(this)} renderItem={this._renderItem.bind(this)}/>
+                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem.bind(this)}/>
                 </List>
             );
         }
@@ -143,26 +144,53 @@ class searchToolWorker extends React.Component {
     render() {
         const custom = styles(this.props);
 
-        return (
-            <Container>
-                <View>
-                    <SearchBar
-                        ref={(ref) => this.searchBar = ref}
-                        data={this.state.data}
-                        showOnLoad
-                        placeholder="Търсете инструмент в работник"
-                        handleChangeText={text => this._handleSearch(text)}
-                        backButton={<AntDesign name="arrowleft" style={custom.stackNavigatorSearchArrow} size={24} onPress={() => { this.props.navigation.navigate('ToolsWorkersView') }} />}
-                        backgroundColor="#22364F"
-                        textColor="#F5F5F5"
-                        iconColor="#F5F5F5"
-                    />
-                </View>
-                {this._checkData()}
-            </Container>
-        );
+        if (this.state.isLoading === true) {
+            return (
+                <Container>
+                    <View>
+                        <SearchBar
+                            ref={(ref) => this.searchBar = ref}
+                            data={this.state.data}
+                            showOnLoad
+                            placeholder="Търсете инструмент в работник"
+                            handleChangeText={text => this._handleSearch(text)}
+                            backButton={<AntDesign name="arrowleft" style={custom.stackNavigatorSearchArrow} size={24} onPress={() => {this.props.navigation.navigate('ToolsWorkersView')}}/>}
+                            backgroundColor={this.props.theme.color}
+                            textColor="#F5F5F5"
+                            iconColor="#F5F5F5"
+                        />
+                    </View>
+                    <Content contentContainerStyle={custom.container} style={custom.content}>
+                        <ActivityIndicator size={70} color="#22364F" />
+                    </Content>
+                </Container>
+            );
+        }
+
+        else {
+            return (
+                <Container>
+                    <View>
+                        <SearchBar
+                            ref={(ref) => this.searchBar = ref}
+                            data={this.state.data}
+                            showOnLoad
+                            placeholder="Търсете инструмент в работник"
+                            handleChangeText={text => this._handleSearch(text)}
+                            backButton={<AntDesign name="arrowleft" style={custom.stackNavigatorSearchArrow} size={24} onPress={() => {this.props.navigation.navigate('ToolsWorkersView')}}/>}
+                            backgroundColor={this.props.theme.color}
+                            textColor="#F5F5F5"
+                            iconColor="#F5F5F5"
+                        />
+                    </View>
+                    {this._checkData()}
+                </Container>
+            );
+        }
     }
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(searchToolWorker);
+/* /Exports/ */

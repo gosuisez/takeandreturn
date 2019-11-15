@@ -1,13 +1,14 @@
 /* Imports */
 import React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { View, Text } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Container, Content } from 'native-base';
 import { Alert } from '@app/components/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign } from '@app/utils/Icons';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -24,7 +25,6 @@ class deleteWorker extends React.Component {
         this._onButtonPress = this._onButtonPress.bind(this);
     }
     /* /Constructor Initialize - Here Are Our States/ */
-
 
     /* On Button Press Method - Reset Actions */
     _onButtonPress = () => {
@@ -79,11 +79,12 @@ class deleteWorker extends React.Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Премахване на работник",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('readWorker') }} style={custom.headerLeft}/>
         };
     };
@@ -121,4 +122,6 @@ class deleteWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(deleteWorker);
+/* /Exports/ */

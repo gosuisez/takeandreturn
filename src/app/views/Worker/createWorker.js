@@ -1,15 +1,15 @@
 /* Imports */
 import React from 'react';
-import { View, TextInput, Text } from 'react-native';
-import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { View, Text, TextInput } from 'react-native';
+import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import validator from '@app/validation/validator';
 import { Button, Alert, NFC } from '@app/components/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign } from '@app/utils/Icons';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -72,7 +72,7 @@ class createWorker extends React.Component {
     };
     /* /Show Error Method - Here We Display Our Error Alert/ */
 
-    /* Component Did Mount Method - Here We Apply On Button Press With Navigation */
+    /* Component Did Mount Method - Here We Mount Component - Data */
     componentDidMount() {
         this.props.navigation.setParams({ handleRemove: this._onButtonPress });
 
@@ -80,12 +80,14 @@ class createWorker extends React.Component {
         NfcManager.registerTagEvent();
         NfcManager.setEventListener(NfcEvents.DiscoverTag, tag => { this.setState({ nfcTagValue: tag.id})});
     }
-    /* /Component Did Mount Method - Here We Apply On Button Press With Navigation/ */
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
 
+    /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         NfcManager.unregisterTagEvent().catch(() => 0);
     }
+    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
 
     /* Handle Create Worker - Create New Worker */
     _handleCreate = () => {
@@ -148,11 +150,12 @@ class createWorker extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Добавяне на работник",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -310,4 +313,6 @@ class createWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createWorker);
+/* /Exports/ */

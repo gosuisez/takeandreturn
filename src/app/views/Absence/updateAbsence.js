@@ -1,16 +1,16 @@
 /* Imports */
 import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
 import { View, Text, TextInput } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
 import validator from '@app/validation/validator';
-import {NavigationActions} from "react-navigation";
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -161,11 +161,12 @@ class updateAbsence extends Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Редактиране на отсъствието на работник",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('readAbsence') }} style={custom.headerLeft}/>
         };
     };
@@ -181,7 +182,7 @@ class updateAbsence extends Component {
         return (
             <Container>
                 <Content style={responsive.absenceForm}>
-                    <View style={responsive.absenceFormBox}>
+                    <View style={responsive.absenceFormBoxUpdate}>
                         <Form>
                             <View style={responsive.absenceFormBoxView}>
                                 <View>
@@ -276,4 +277,6 @@ class updateAbsence extends Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(updateAbsence);
+/* /Exports/ */

@@ -1,17 +1,17 @@
 /* Imports */
 import React from 'react';
-import { View, Text, TextInput } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { View, TextInput, Text } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert, NFC } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -100,6 +100,7 @@ class returnToolWorker extends React.Component {
     };
     /* /Show Error Method - Here We Display Our Error Alert/ */
 
+    /* Component Did Mount Method - Here We Mount Component - Data */
     componentDidMount() {
         this.props.navigation.setParams({ handleRemove: this._onButtonPress });
 
@@ -109,28 +110,27 @@ class returnToolWorker extends React.Component {
             this.tagTouched(tag);
         });
     }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
 
+    /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         NfcManager.unregisterTagEvent().catch(() => 0);
     }
+    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
 
+    /* Tag Touched Method - Here We Find Worker With NFC Tag */
     tagTouched(tag){
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_worker WHERE worker_pincode = ?', [tag.id], (tx, results) => {
                 let worker = results.rows.item(0);
 
-                if(worker) {
+                if (worker)
                     this.setState({ nfcTagValue: tag.id });
-                }
-
-                // console.log(worker.worker_fname);
-                // let rows = results.rows.first();
-                // this.setState({ worker: rows });
-                // this.arrayholder = rows;
             })
         });
     }
+    /* /Tag Touched Method - Here We Find Worker With NFC Tag/ */
 
     /* Show Date Picker Method - Show Picker Where You Can Select Date */
     _showDatePicker = () => this.setState({ isDateTimePickerVisibleOne: true });
@@ -180,18 +180,6 @@ class returnToolWorker extends React.Component {
     };
     /* /Handle Date Picker Second - Date Picked/ */
 
-    /* Get All Workers Method - Data For All Workers */
-    _getAllWorkers = () => {
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_worker', [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows });
-                this.arrayholder = rows;
-            })
-        });
-    };
-    /* /Get All Workers Method - Data For All Workers/ */
-
     /* Handle Return ToolWorker - Return ToolWorker */
     _handleReturn = () => {
         let that = this;
@@ -240,7 +228,7 @@ class returnToolWorker extends React.Component {
                 const tool_id = navigation.getParam('tool_id');
                 const worker_tiw = navigation.getParam('worker_tiw');
                 const worker_riw = navigation.getParam('worker_riw');
-                const worker_id = navigation.getParam('tool_id');
+                const worker_id = navigation.getParam('worker_id');
 
                 db.transaction((tx) => {
                     tx.executeSql(
@@ -274,11 +262,12 @@ class returnToolWorker extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Връщане на инструмент",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -328,9 +317,9 @@ class returnToolWorker extends React.Component {
         return (
             <Container>
                 <Content style={responsive.toolWorkerFormReturn}>
-                    <View style={responsive.toolWorkerFormReturnBox}>
+                    <View style={responsive.toolWorkerFormBoxReturn}>
                         <Form>
-                            <View style={responsive.toolWorkerFormReturnBoxView}>
+                            <View style={responsive.toolWorkerFormBoxReturnView}>
                                 <View>
                                     <Label style={custom.FormLabel}>Име на работника:</Label>
                                 </View>
@@ -480,4 +469,6 @@ class returnToolWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(returnToolWorker);
+/* /Exports/ */

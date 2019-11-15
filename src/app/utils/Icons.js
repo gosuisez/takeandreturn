@@ -8,4 +8,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 /* /Imports/ */
 
+/* Exports */
 export { AntDesign, Entypo, FontAwesome, FontAwesomeFive, Foundation, MaterialCommunityIcons, MaterialIcons };
+/* /Exports/ */

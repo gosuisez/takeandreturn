@@ -1,17 +1,17 @@
 /* Imports */
 import React, { Component } from 'react';
-import {View, Text, Picker, TextInput} from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { View, Text, TextInput, Picker } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
-import {Container, Content, Form, Item, Label} from 'native-base';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert, NFC } from '@app/components/config';
 import validator from '@app/validation/validator';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -182,6 +182,7 @@ class createSchedule extends Component {
     };
     /* /Handle Time Picker Four - Time Picked/ */
 
+    /* Component Did Mount Method - Here We Mount Component - Data */
     componentDidMount() {
         this.props.navigation.setParams({ handleRemove: this._onButtonPress });
 
@@ -191,30 +192,28 @@ class createSchedule extends Component {
             this.tagTouched(tag);
         });
     }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
 
+    /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         NfcManager.unregisterTagEvent().catch(() => 0);
     }
+    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
 
+    /* Tag Touched Method - Here We Find Worker With NFC Tag */
     tagTouched(tag){
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_worker WHERE worker_pincode = ?', [tag.id], (tx, results) => {
                 let worker = results.rows.item(0);
 
                 if(worker) {
-                    console.log("Updating state");
-                    this.setState({ pickedName: worker});
-                    this.setState({ nfcTagValue: tag.id });
+                    this.setState({ pickedName: worker, nfcTagValue: tag.id});
                 }
-
-                // console.log(worker.worker_fname);
-                // let rows = results.rows.first();
-                // this.setState({ worker: rows });
-                // this.arrayholder = rows;
             })
         });
     }
+    /* /Tag Touched Method - Here We Find Worker With NFC Tag/ */
 
     /* Get All Workers Method - Data For All Workers */
     _getAllWorkers = () => {
@@ -228,6 +227,7 @@ class createSchedule extends Component {
     };
     /* /Get All Workers Method - Data For All Workers/ */
 
+    /* Get Worker From Id - Here We Find Worker From Id */
     getWorkerFromId(id){
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_worker WHERE worker_id = ?', [id], (tx, results) => {
@@ -240,7 +240,9 @@ class createSchedule extends Component {
             })
         });
     }
+    /* /Get Worker From Id - Here We Find Worker From Id/ */
 
+    /* Handle Create Schedule - Create New Schedule */
     _handleCreate = () => {
         let that = this;
 
@@ -301,16 +303,18 @@ class createSchedule extends Component {
             this.setState(() => ({ nfcTagValueError: "Сканирайте вашата карта!" }));
         }
     };
+    /* /Handle Create Schedule - Create New Schedule/ */
 
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Добавяне на график на работник",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -481,4 +485,6 @@ class createSchedule extends Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createSchedule);
+/* /Exports/ */

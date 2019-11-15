@@ -1,14 +1,14 @@
 /* Imports */
 import React from 'react';
-import { View, TextInput, Text } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { View, TextInput, Text } from 'react-native';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -102,11 +102,12 @@ class createCategory extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Добавяне на категория",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -121,10 +122,10 @@ class createCategory extends React.Component {
 
         return (
             <Container>
-                <Content style={responsive.subCategoryForm}>
-                    <View style={responsive.subCategoryFormBox}>
+                <Content style={responsive.categoryForm}>
+                    <View style={responsive.categoryFormBox}>
                         <Form>
-                            <View style={responsive.subCategoryFormBoxView}>
+                            <View style={responsive.categoryFormBoxView}>
                                 <View>
                                     <Label style={custom.FormLabel}>Име на категорията:</Label>
                                 </View>
@@ -143,7 +144,7 @@ class createCategory extends React.Component {
                         </Form>
                     </View>
                     <View>
-                       <Alert title={'Успешно'} body={'Вие добавихте категорията успешно!'} visible={dialogVisible} onSubmit={this._onButtonPress} onCancel={this._onButtonPress} first={"OK"} second={""}/>
+                        <Alert title={'Успешно'} body={'Вие добавихте категорията успешно!'} visible={dialogVisible} onSubmit={this._onButtonPress} onCancel={this._onButtonPress} first={"OK"} second={""}/>
                     </View>
                     <View>
                         <Alert title={'Грешка'} body={'При добавянето на категория нещо се обърка, моля опитайте по-късно!'} visible={dialogError} onSubmit={this._onButtonPress} onCancel={this._onButtonPress} first={"ОК"} second={""}/>
@@ -156,4 +157,6 @@ class createCategory extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createCategory);
+/* /Exports/ */

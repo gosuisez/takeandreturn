@@ -1,16 +1,17 @@
 /* Imports */
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
-import {Content} from 'native-base';
-import {AntDesign} from '@app/utils/Icons';
-import {Button} from 'react-native-elements';
-import {Alert} from '@app/components/config';
-import {NavigationActions, StackActions} from 'react-navigation';
-import { withTheme } from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
-import db from "@app/utils/Database";
+import { NavigationActions, StackActions } from 'react-navigation';
+import { View, Text } from 'react-native';
 import RNFS from 'react-native-fs';
+import { Button } from 'react-native-elements';
+import { Content } from 'native-base';
+import { Alert } from '@app/components/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import withPreventDoubleClick from '@app/utils/Constants';
+import { AntDesign } from '@app/utils/Icons';
+import db from "@app/utils/Database";
 const DefaultButton = withPreventDoubleClick(Button);
 /* /Imports/ */
 
@@ -149,10 +150,11 @@ class ImportData extends Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({navigation, screenProps}) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Импортиране на данни",
-            headerStyle: { backgroundColor: screenProps.theme.color },
+            headerStyle: responsive.headerStyle,
             headerTitleStyle: {color: '#F5F5F5'},
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => {navigation.navigate('Settings')}} style={custom.headerLeft} />
         };
@@ -162,45 +164,48 @@ class ImportData extends Component {
     /* Render Method - Is Place Where You Can View All Content Of The Page */
     render() {
         const {dialogVisible, dialogError, disabled} = this.state;
-        const theme = styles(this.props);
+        const custom = styles(this.props);
 
         return (
-            <Content style={theme.content}>
-                <View style={theme.settingsOtherView}>
-                    <Text style={theme.settingsQuestion}>
+            <Content style={custom.content}>
+                <View style={custom.settingsOtherView}>
+                    <Text style={custom.settingsQuestion}>
                         Какво представлява импортирането на данни?
                     </Text>
-                    <Text style={theme.settingsAnswer}>
+                    <Text style={custom.settingsAnswer}>
                         Импортирането на данни представлява опция, в която вие можете да импортирате
                         (вмъкнете) данни от файл на физическото устройство (телефона) като файл.
                     </Text>
                 </View>
-                <View style={theme.settingsOtherView}>
-                    <Text style={theme.settingsQuestion}>
-                        Как да импортираме данните си?
+                <View style={custom.settingsOtherView}>
+                    <Text style={custom.settingsQuestion}>
+                        Как да импортирате данните си?
                     </Text>
-                    <Text style={theme.settingsAnswer}>
-                        За да импортираме данните си ние трябва да изберем бутона импорт.
-                    </Text>
-                </View>
-                <View style={theme.settingsOtherView}>
-                    <Text style={theme.settingsQuestion}>
-                        Какво се случва след като импортираме данните си?
-                    </Text>
-                    <Text style={theme.settingsAnswer}>
-                        След като импортираме данните си те се записват (вмъкват) автоматично в нашето приложение в съотвения списък.
+                    <Text style={custom.settingsAnswer}>
+                        За да импортирате данните си вие трябва да изберете бутона "Импорт".
                     </Text>
                 </View>
-                <View style={theme.settingsOtherView}>
-                    <Text style={theme.settingsQuestion}>
-                        Какво е важно да знаем като импортираме данните си?
+                <View style={custom.settingsOtherView}>
+                    <Text style={custom.settingsQuestion}>
+                        Какво се случва след като импортирате данните си?
                     </Text>
-                    <Text style={theme.settingsAnswer}>
-                        Когато импортираме данните си и трябва да вземем файла, който сме преместили или копирали или споделили, за да може да вземем файла и да го експортираме успешно.
+                    <Text style={custom.settingsAnswer}>
+                        След като импортирате данните си те се записват (вмъкват) автоматично в нашето приложение в съотвения списък.
                     </Text>
                 </View>
-                <View style={theme.settingsDataButtonView}>
-                    <DefaultButton title="Импорт" buttonStyle={theme.settingsDataButtonStyle} onPress={this._importData} disabled={disabled}/>
+                <View style={custom.settingsOtherView}>
+                    <Text style={custom.settingsQuestion}>
+                        Какво е важно да знаете като импортирате данните си?
+                    </Text>
+                    <Text style={custom.settingsAnswer}>
+                        Когато импортирате данните си трябва файла, който сте преместили, копирали или споделили да е в следната директория: /storage/emulated/0/Android/data/com.takeandreturn/files/takeandreturn.json, а именно във вътрешното хранилище (internal storage-а) на вашето физическо устройство, за да можем да вземем файла и да го експортираме успешно.
+                    </Text>
+                    <Text style={custom.settingsAnswer}>
+                        Важно: Ако не сме преместили, копирали или споделили нашият json файл при експортирането, ако се опитате да импортирате данни ще получите грешка!
+                    </Text>
+                </View>
+                <View style={custom.settingsDataButtonView}>
+                    <DefaultButton title="Импорт" buttonStyle={custom.settingsDataButtonStyle} onPress={this._importData} disabled={disabled}/>
                 </View>
                 <View>
                     <Alert title={'Успешно'} body={'Вие успешно импортирахте данните си!'} visible={dialogVisible} onSubmit={this._onButtonPress} onCancel={this._onButtonPress} first={"OK"} second={""}/>
@@ -214,4 +219,6 @@ class ImportData extends Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(ImportData);
+/* /Exports/ */

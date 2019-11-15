@@ -1,13 +1,14 @@
 /* Imports */
 import React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Container, Content } from 'native-base';
-import { AntDesign } from '@app/utils/Icons';
 import { Alert } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -81,11 +82,12 @@ class deleteSubCategory extends React.Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Премахване на подкатегория",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" style={custom.stackNavigatorBackIcon} onPress={() => { navigation.navigate('SubCategories') }}/>
         };
     };
@@ -124,4 +126,6 @@ class deleteSubCategory extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(deleteSubCategory);
+/* /Exports/ */

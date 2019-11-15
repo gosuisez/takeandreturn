@@ -1,14 +1,14 @@
 /* Imports */
 import React from 'react';
-import { View, TextInput, Text } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { View, TextInput, Text } from 'react-native';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -160,11 +160,12 @@ class updateWorker extends React.Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
        const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
        return {
            title: "Редактиране на работник",
-           headerStyle: { backgroundColor: screenProps.theme.color },
-           headerTitleStyle: { color: '#F5F5F5' },
+           headerStyle: responsive.headerStyle,
+           headerTitleStyle: responsive.headerTitleStyle,
            headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('readWorker') }} style={custom.headerLeft}/>
        };
     };
@@ -181,7 +182,7 @@ class updateWorker extends React.Component {
             <Container>
                 <Content style={custom.PartForm}>
                     <Content style={responsive.workerForm}>
-                        <View style={responsive.workerFormBox}>
+                        <View style={responsive.workerFormBoxUpdate}>
                             <Form>
                                 <View style={responsive.workerFormBoxView}>
                                     <View>
@@ -308,4 +309,6 @@ class updateWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(updateWorker);
+/* /Exports/ */

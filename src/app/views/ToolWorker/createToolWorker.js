@@ -1,17 +1,17 @@
 /* Imports */
 import React from 'react';
-import {View, Text, Picker, TextInput } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { View, Text, Picker, TextInput } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import NfcManager, { NfcEvents } from 'react-native-nfc-manager';
 import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert, NFC } from '@app/components/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -100,7 +100,7 @@ class createToolWorker extends React.Component {
     };
     /* /Show Error Method - Here We Display Our Error Alert/ */
 
-    /* Component Did Mount Method - Here We Apply On Button Press With Navigation */
+    /* Component Did Mount Method - Here We Mount Component - Data */
     componentDidMount() {
         this.props.navigation.setParams({ handleRemove: this._onButtonPress });
 
@@ -110,31 +110,42 @@ class createToolWorker extends React.Component {
             this.tagTouched(tag);
         });
     };
-    /* /Component Did Mount Method - Here We Apply On Button Press With Navigation/ */
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
 
+    /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         NfcManager.setEventListener(NfcEvents.DiscoverTag, null);
         NfcManager.unregisterTagEvent().catch(() => 0);
     }
+    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
 
+    /* Tag Touched Method - Here We Find Worker With NFC Tag */
     tagTouched(tag){
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_worker WHERE worker_pincode = ?', [tag.id], (tx, results) => {
                 let worker = results.rows.item(0);
 
-                if(worker) {
-                    console.log("Updating state");
-                    this.setState({ pickedName: worker});
-                    this.setState({ nfcTagValue: tag.id });
-                }
-
-                // console.log(worker.worker_fname);
-                // let rows = results.rows.first();
-                // this.setState({ worker: rows });
-                // this.arrayholder = rows;
+                if (worker)
+                    this.setState({ pickedName: worker, nfcTagValue: tag.id});
             })
         });
     }
+    /* /Tag Touched Method - Here We Find Worker With NFC Tag/ */
+
+    /* Get Worker From Id - Here We Find Worker From Id */
+    getWorkerFromId(id){
+        db.transaction((tx) => {
+            tx.executeSql('SELECT * FROM table_worker WHERE worker_id = ?', [id], (tx, results) => {
+                let worker = results.rows.item(0);
+
+                if(worker){
+                    this.setState({ pickedName: worker });
+                    this.setState({ nfcTagValue: tag.id });
+                }
+            })
+        });
+    }
+    /* /Get Worker From Id - Here We Find Worker From Id/ */
 
     /* Get All Workers Method - Data For All Workers */
     _getAllWorkers = () => {
@@ -217,16 +228,7 @@ class createToolWorker extends React.Component {
         let worker_pincodeError = validator('worker_pincode', worker_pincode);
         let nfcTagValueError = validator('nfcTagValue', nfcTagValue);
 
-        this.setState({
-            tool_nameError: tool_nameError,
-            date_takeError: date_takeError,
-            hour_takeError: hour_takeError,
-            worker_fnameError:worker_fnameError,
-            worker_snameError: worker_snameError,
-            worker_lnameError: worker_lnameError,
-            worker_pincodeError: worker_pincodeError,
-            nfcTagValueError: nfcTagValueError
-        });
+        this.setState({tool_nameError: tool_nameError, date_takeError: date_takeError, hour_takeError: hour_takeError, worker_fnameError:worker_fnameError, worker_snameError: worker_snameError, worker_lnameError: worker_lnameError, worker_pincodeError: worker_pincodeError, nfcTagValueError: nfcTagValueError});
 
         if (!worker_fnameError) {
         if (!worker_snameError) {
@@ -271,28 +273,16 @@ class createToolWorker extends React.Component {
     };
     /* /Handle Create ToolWorker - Create New ToolWorker/ */
 
-    getWorkerFromId(id){
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_worker WHERE worker_id = ?', [id], (tx, results) => {
-                let worker = results.rows.item(0);
-
-                if(worker){
-                    this.setState({ pickedName: worker });
-                    this.setState({ nfcTagValue: tag.id });
-                }
-            })
-        });
-    }
-
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Вземане на инструмент",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft} />
         };
     };
@@ -458,4 +448,6 @@ class createToolWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createToolWorker);
+/* /Exports/ */

@@ -1,15 +1,17 @@
 /* Imports */
 import React from 'react';
 import { Text, FlatList, View, TouchableOpacity, StatusBar, Image, ActivityIndicator } from 'react-native';
-import { Container, Content, ListItem, List, Fab, Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
+import { ListItem, List, Content, Container, Header, Left, Button, Body, Title, Right, Fab, Icon } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
-import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
 /* /Imports/ */
 
-class ToolsView extends React.Component {
+class ToolsView extends React.PureComponent {
+    _isMounted = false;
+
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
         super(props);
@@ -20,40 +22,42 @@ class ToolsView extends React.Component {
         };
     }
     /* /Constructor Initialize - Here Are Our States/ */
-    _isMounted = false;
-    /* Component Did Mount Method - Here Is Our Data For Tools */
-    componentDidMount() {
+
+    /* Component Data Method - Here Is Our Data For Tools */
+    componentData() {
         const { navigation } = this.props;
         const subcategory_id = navigation.getParam('subcategory_id');
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_tools WHERE subcategory_id=' + `${subcategory_id}`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
+                this._isMounted = true;
+
+                if (this._isMounted) {
+                    let rows = results.rows.raw();
+                    this.setState({ data: rows, isLoading: false });
+                    this.arrayholder = rows;
+                }
             });
         });
     }
-    /* /Component Did Mount Method - Here Is Our Data For Tools/ */
+    /* /Component Data Method - Here Is Our Data For Tools/ */
+
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
+    }
+    /* /Component Did Mount Method - Here We Mount Component - Data  */
+
+    /* Component Did Update Method - Here We Update Component - Data */
+    componentDidUpdate() {
+        this.componentData();
+    }
+    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         this._isMounted = false;
     }
     /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
-
-    /* Component Did Update Method - Here We Update Component - Data */
-    componentDidUpdate() {
-        const { navigation } = this.props;
-        const subcategory_id = navigation.getParam('subcategory_id');
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_tools WHERE subcategory_id=' + `${subcategory_id}`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
-            });
-        });
-    }
-    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Handle Search Method - Navigate to SearchTool */
     _handleSearch() {
@@ -86,8 +90,8 @@ class ToolsView extends React.Component {
     /* /Handle Delete Method - Navigate to DeleteTool/ */
 
     /* Key Extractor Method - For Index Tools */
-    _keyExtractor(index) {
-        return index.toString();
+    _keyExtractor({ item, index }) {
+        return 'key' + index;
     }
     /* /Key Extractor Method - For Index Tools/ */
 
@@ -113,7 +117,7 @@ class ToolsView extends React.Component {
         if (this.state.data.length > 0) {
             return (
                 <List style={custom.PartList}>
-                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={this._keyExtractor.bind(this)} renderItem={this._renderItem.bind(this)} />
+                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem.bind(this)} />
                 </List>
             );
         }
@@ -211,4 +215,6 @@ class ToolsView extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(ToolsView);
+/* /Exports/ */

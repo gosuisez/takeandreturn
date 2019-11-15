@@ -1,16 +1,18 @@
 /* Imports */
 import React from 'react';
-import { Text, View, TouchableOpacity, StatusBar, ActivityIndicator, Image } from 'react-native';
-import { Container, Content, ListItem, List, Icon, Fab, Header, Body, Left, Title, Button, Right } from 'native-base';
-import {SwipeListView} from "react-native-swipe-list-view";
+import { View, Image, Text, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
+import { ListItem, List, Content, Container, Header, Left, Button, Body, Title, Right, Fab, Icon } from 'native-base';
+import { SwipeListView } from "react-native-swipe-list-view";
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign, FontAwesome, FontAwesomeFive } from '@app/utils/Icons';
 import db from "@app/utils/Database";
-import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
 /* /Imports/ */
 
-class CategoriesView extends React.Component {
+class CategoriesView extends React.PureComponent {
+    _isMounted = false;
+
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
         super(props);
@@ -22,10 +24,8 @@ class CategoriesView extends React.Component {
     }
     /* /Constructor Initialize - Here Are Our States/ */
 
-    _isMounted = false;
-
-    /* Component Did Mount Method - Here Is Our Data For Absences */
-    componentDidMount() {
+    /* Component Data Method - Here Is Our Data For Categories */
+    componentData() {
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM categories', [], (tx, results) => {
                 this._isMounted = true;
@@ -36,27 +36,25 @@ class CategoriesView extends React.Component {
             });
         });
     }
-    /* /Component Did Mount Method - Here Is Our Data For Absences/ */
+    /* Component Data Method - Here Is Our Data For Categories */
+
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
+    }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
+
+    /* Component Did Update Method - Here We Update Component - Data */
+    componentDidUpdate() {
+        this.componentData();
+    }
+    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         this._isMounted = false;
     }
     /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
-
-    /* Component Did Update Method - Here We Update Component - Data */
-    componentDidUpdate() {
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM categories', [], (tx, results) => {
-                this._isMounted = true;
-                if (this._isMounted) {
-                    let rows = results.rows.raw();
-                    this.setState({ data: rows, isLoading: false });
-                }
-            });
-        });
-    }
-    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Handle Search Method - Navigate to SearchCategory */
     _handleSearch() {
@@ -243,4 +241,6 @@ class CategoriesView extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(CategoriesView);
+/* /Exports/ */

@@ -1,5 +1,5 @@
 /* Here We Import And Export Our Components */
-import intro from '@app/styles/intro/intro';
+import { intro } from '@app/styles/intro/intro';
 import { styles } from '@app/styles/custom/custom';
 import { responsives } from '@app/styles/responsive/responsive';
 

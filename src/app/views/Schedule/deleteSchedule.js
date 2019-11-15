@@ -1,13 +1,14 @@
 /* Imports */
 import React from 'react';
+import { NavigationActions, StackActions } from "react-navigation";
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Container, Content } from 'native-base';
-import { AntDesign } from '@app/utils/Icons';
-import {NavigationActions, StackActions} from "react-navigation";
 import { Alert } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -78,11 +79,12 @@ class deleteSchedule extends React.Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Премахване на график",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('readSchedule') }} style={custom.headerLeft}/>
         };
     };
@@ -120,4 +122,6 @@ class deleteSchedule extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(deleteSchedule);
+/* /Exports/ */

@@ -1,18 +1,28 @@
 /* Imports */
 import React from 'react';
-import { Text, View, FlatList, Image, StatusBar, TouchableOpacity } from 'react-native';
-import { Container, Content, ListItem, List, Icon, Fab, Header, Body, Left, Title, Button, Right } from 'native-base';
-import CheckBox from 'react-native-check-box'
-import moment from 'moment';
 import { NavigationActions, StackActions } from 'react-navigation';
-import db from "@app/utils/Database";
+import {
+    View,
+    Image,
+    Text,
+    FlatList,
+    StatusBar,
+    TouchableOpacity,
+    ActivityIndicator
+} from 'react-native';
+import CheckBox from 'react-native-check-box'
+import { ListItem, List, Content, Container, Header, Left, Body, Title, Button, Right, Fab, Icon } from 'native-base';
+import moment from 'moment';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
 import { MaterialCommunityIcons } from '@app/utils/Icons';
+import db from "@app/utils/Database";
 /* /Imports/ */
 
-class ToolsWorkersView extends React.Component {
+class ToolsWorkersView extends React.PureComponent {
+    _isMounted = false;
+
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
         super(props);
@@ -27,36 +37,40 @@ class ToolsWorkersView extends React.Component {
         };
     }
     /* /Constructor Initialize - Here Are Our States/ */
-    _isMounted = false;
-    /* Component Did Mount Method - Here Is Our Data For Tools In Workers */
-    componentDidMount() {
+
+    /* Component Data Method - Here Is Our Data For Tools In Workers */
+    componentData() {
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_tools_workers JOIN table_tools ON table_tools.tool_id = table_tools_workers.tool_id JOIN table_worker ON table_worker.worker_id = table_tools_workers.worker_id', [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
-            })
+                this._isMounted = true;
+
+                if (this._isMounted) {
+                    let rows = results.rows.raw();
+                    this.setState({ data: rows, isLoading: false });
+                    this.arrayholder = rows;
+                }
+            });
         });
     }
-    /* /Component Did Mount Method - Here Is Our Data For Tools In Workers/ */
+    /* Component Data Method - Here Is Our Data For Tools In Workers */
+
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
+    }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
+
+    /* Component Did Update Method - Here We Update Component - Data */
+    componentDidUpdate() {
+        this.componentData();
+    }
+    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         this._isMounted = false;
     }
     /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
-
-    /* Component Did Update Method - Here We Update Component - Data */
-    componentDidUpdate() {
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_tools_workers JOIN table_tools ON table_tools.tool_id = table_tools_workers.tool_id JOIN table_worker ON table_worker.worker_id = table_tools_workers.worker_id', [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
-            })
-        });
-    }
-    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Handle Create Method - Navigate to CreateToolWorker */
     _handleCreate() {
@@ -149,7 +163,7 @@ class ToolsWorkersView extends React.Component {
         if (this.state.data.length > 0) {
             return (
                 <List style={custom.PartList}>
-                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={this._keyExtractor.bind(this)} renderItem={this._renderItem.bind(this)}/>
+                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem.bind(this)}/>
                 </List>
             );
         }
@@ -182,38 +196,77 @@ class ToolsWorkersView extends React.Component {
         const responsive = responsives(this.props);
         const custom = styles(this.props);
 
-        return (
-            <Container>
-                <Header style={custom.header}>
-                    <StatusBar backgroundColor="#425768" barStyle="default"/>
-                    <Left>
-                        <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
-                            <Button transparent onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
-                                <Icon name="menu" style={custom.headerIcon} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}/>
-                            </Button>
-                        </TouchableOpacity>
-                    </Left>
-                    <Body style={custom.headerBody}>
-                        <Title style={responsive.headerTitle}>Взети и върнати</Title>
-                    </Body>
-                    <Right>
-                        <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.handleSearch()}>
-                            <Button transparent onPress={() => this.handleSearch()}>
-                                <Icon name="search" style={custom.headerIcon} onPress={() => this.handleSearch()}/>
-                            </Button>
-                        </TouchableOpacity>
-                    </Right>
-                </Header>
-                {this._checkData()}
-                <View>
-                    <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
-                        <Icon name="add"/>
-                    </Fab>
-                </View>
-            </Container>
-        );
+        if (this.state.isLoading === true ) {
+            return (
+                <Container>
+                    <Header style={custom.header}>
+                        <StatusBar backgroundColor="#425768" barStyle="default"/>
+                        <Left>
+                            <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
+                                <Button transparent onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
+                                    <Icon name="menu" style={custom.headerIcon} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}/>
+                                </Button>
+                            </TouchableOpacity>
+                        </Left>
+                        <Body style={custom.headerBody}>
+                            <Title style={responsive.headerTitle}>Взети и върнати</Title>
+                        </Body>
+                        <Right>
+                            <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.handleSearch()}>
+                                <Button transparent onPress={() => this.handleSearch()}>
+                                    <Icon name="search" style={custom.headerIcon} onPress={() => this.handleSearch()}/>
+                                </Button>
+                            </TouchableOpacity>
+                        </Right>
+                    </Header>
+                    <Content contentContainerStyle={custom.container} style={custom.content}>
+                        <ActivityIndicator size={70} color="#243039" />
+                    </Content>
+                    <View>
+                        <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
+                            <Icon name="add"/>
+                        </Fab>
+                    </View>
+                </Container>
+            );
+        }
+
+        else {
+            return (
+                <Container>
+                    <Header style={custom.header}>
+                        <StatusBar backgroundColor="#425768" barStyle="default"/>
+                        <Left>
+                            <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
+                                <Button transparent onPress={() => this.props.navigation.openDrawer('DrawerOpen')}>
+                                    <Icon name="menu" style={custom.headerIcon} onPress={() => this.props.navigation.openDrawer('DrawerOpen')}/>
+                                </Button>
+                            </TouchableOpacity>
+                        </Left>
+                        <Body style={custom.headerBody}>
+                            <Title style={responsive.headerTitle}>Взети и върнати</Title>
+                        </Body>
+                        <Right>
+                            <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this.handleSearch()}>
+                                <Button transparent onPress={() => this.handleSearch()}>
+                                    <Icon name="search" style={custom.headerIcon} onPress={() => this.handleSearch()}/>
+                                </Button>
+                            </TouchableOpacity>
+                        </Right>
+                    </Header>
+                    {this._checkData()}
+                    <View>
+                        <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
+                            <Icon name="add"/>
+                        </Fab>
+                    </View>
+                </Container>
+            );
+        }
     }
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(ToolsWorkersView);
+/* /Exports/ */

@@ -1,10 +1,11 @@
 /* Imports */
 import React from 'react';
-import { View, Text, ScrollView, Image } from 'react-native';
+import { ScrollView, View, Image, Text } from 'react-native';
 import { Container, Footer, FooterTab, Button } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign, FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@app/utils/Icons';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 /* /Imports/ */
 
 class readToolWorker extends React.Component {
@@ -17,11 +18,12 @@ class readToolWorker extends React.Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Преглеждане на инструмент",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('ToolsWorkersView') }} style={custom.headerLeft}/>
         };
     };
@@ -115,4 +117,6 @@ class readToolWorker extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(readToolWorker);
+/* Exports */

@@ -1,3 +1,4 @@
+/* Exports */
 export const Colors = {
     transparent: 'rgba(0,0,0,0)',
     black: '#000000',
@@ -7,3 +8,4 @@ export const Colors = {
     red: '#FF0000',
     default: '#243039'
 };
+/* /Exports/ */

@@ -1,19 +1,14 @@
+/* Imports */
 import { Dimensions, StyleSheet } from 'react-native';
-import {relativeWidth} from "@app/utils/Relatives";
-import {Fonts} from "@app/utils/Fonts";
-import {Margins, Paddings} from "@app/utils/Spacing";
-import {Colors} from "@app/utils/Colors";
+import { relativeWidth } from "@app/utils/Relatives";
+import { Fonts } from "@app/utils/Fonts";
+import { Margins, Paddings } from "@app/utils/Spacing";
+import { Colors } from "@app/utils/Colors";
+/* /Imports/ */
+
 const { width } = Dimensions.get('window');
 
 export const styles = (props) => StyleSheet.create({
-    colorTheme: {
-        color: props.theme.backgroundColor,
-        marginTop: 60,
-        marginBottom: 20,
-        marginLeft: 20,
-        fontWeight: '200',
-        fontSize: 24,
-    },
     backgroundColorTheme: {
         backgroundColor: props.theme.backgroundColor,
     },
@@ -57,7 +52,7 @@ export const styles = (props) => StyleSheet.create({
         borderBottomWidth: 2
     },
     drawerItems: {
-        marginTop: Margins.top.mt10
+        marginTop: Margins.top.mt10,
     },
     stackNavigatorBackIcon: {
         marginLeft: Margins.left.ml10,
@@ -115,17 +110,13 @@ export const styles = (props) => StyleSheet.create({
     },
     FormButton: {
         alignItems: 'center',
-        backgroundColor: props.theme.buttonColor,
-        color: '#F5F5F5',
+        backgroundColor: '#2EBEE5',
         paddingLeft: Paddings.left.pl10,
         paddingRight: Paddings.right.pr10,
         marginTop: Margins.top.mt15,
         marginLeft: Margins.left.ml15,
         marginRight: Margins.right.mr15,
         borderRadius: 5
-    },
-    FormButtonTitle: {
-        color: '#F5F5F5'
     },
     FormFieldSpacing: {
         marginTop: Margins.top.mt15
@@ -135,22 +126,7 @@ export const styles = (props) => StyleSheet.create({
     },
     /* /Form/ */
 
-    /* Home */
-    homeDescriptionText: {
-        color: props.theme.anotherTextColor,
-        fontSize: 16,
-        textAlign: 'center',
-        fontFamily: Fonts.FiraSans
-    },
-    homeDescriptionButton: {
-        marginTop: Margins.top.mt30
-    },
-    videoBackground: {
-        backgroundColor: props.theme.backgroundColor
-    },
-    /* /Home/ */
-
-    /* CRUD For Categories, SubCategories And Tools */
+    /* CRUD For Categories, SubCategories, Tools, ToolsInWorkers, Workers, Absences And Schedules */
     PartView: {
         backgroundColor: props.theme.backgroundColor,
         elevation: 5,
@@ -177,19 +153,6 @@ export const styles = (props) => StyleSheet.create({
         backgroundColor: props.theme.backgroundColor,
         flex: 1
     },
-    PartListSearchView: {
-        backgroundColor: props.theme.backgroundColor,
-        elevation: 5,
-        marginLeft: relativeWidth(0.01),
-        marginRight: relativeWidth(0.01),
-        marginTop: relativeWidth(2),
-        marginBottom: relativeWidth(2),
-        shadowRadius: 5,
-        shadowOffset: {
-            width: 5,
-            height: 5
-        }
-    },
     PartListItem: {
         borderBottomWidth: 0
     },
@@ -197,7 +160,6 @@ export const styles = (props) => StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: -Margins.left.ml15,
-        color: props.theme.iconColor,
     },
     PartIcon: {
         position: 'absolute',
@@ -321,25 +283,8 @@ export const styles = (props) => StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center'
     },
-    PartNoData: {
-        textAlign: 'center',
-        color: '#F5F5F5',
-        marginTop: Margins.top.mt25,
-        paddingLeft: Paddings.left.pl10,
-        paddingRight: Paddings.right.pr10,
-        fontSize: 15,
-        fontFamily: Fonts.FiraSans
-    },
     PartCalendarView: {
         flex: 1
-    },
-    PartCalendar: {
-        backgroundColor: props.theme.color,
-        borderRadius: 10,
-        marginLeft: Margins.left.ml20,
-        marginRight: Margins.right.mr20,
-        marginTop: Margins.top.mt20,
-        height: 70
     },
     PartCalendarItem: {
         backgroundColor: props.theme.color,
@@ -372,7 +317,7 @@ export const styles = (props) => StyleSheet.create({
         height: 350,
         backgroundColor: props.theme.backgroundColor
     },
-    /* /CRUD For Categories, SubCategories And Tools/ */
+    /* /CRUD For Categories, SubCategories, Tools, ToolsInWorkers, Workers, Absences And Schedules/ */
 
     /* About App */
     aboutAppBlock: {
@@ -396,9 +341,6 @@ export const styles = (props) => StyleSheet.create({
     /* /About App/ */
 
     /* Settings */
-    settingsText: {
-        color: props.theme.textColor,
-    },
     settingsListItem: {
         borderBottomWidth: 0,
     },
@@ -425,20 +367,10 @@ export const styles = (props) => StyleSheet.create({
     settingsThemeContainer: {
         flex: 1,
     },
-    settingsThemeHeadline: {
-        marginTop: 60,
-        marginBottom: 20,
-        marginLeft: 20,
-        fontWeight: '200',
-        fontSize: 24,
-    },
     settingsThemeItem: {
         height: 100,
         justifyContent: 'center',
         paddingLeft: 20,
-    },
-    settingsThemeText: {
-        fontWeight: 'bold'
     },
     settingsMenuHeader: {
         backgroundColor: props.theme.color,
@@ -487,53 +419,9 @@ export const styles = (props) => StyleSheet.create({
     },
     /* /Alerts/ */
 
-    /* NFC */
-    NFCView: {
-        marginTop: Margins.top.mt15
-    },
-    NFCErrorText: {
-        color: '#FF0000',
-        fontFamily: Fonts.FiraSans,
-        textAlign: 'center'
-    },
-    NFCText: {
-        color: '#2EBEE5',
-        alignSelf: 'center',
-        marginTop: Margins.top.mt15,
-        fontSize: 15,
-        fontFamily: Fonts.FiraSansMedium
-    },
-    NFCTitle: {
-        textAlign: 'center',
-        fontSize: 20,
-        color: '#22364F',
-        fontFamily: Fonts.FiraSansMedium
-    },
-    NFCAnimation: {
-        width: 300,
-        height: 200,
-        marginTop: Margins.top.mt125,
-        alignItems: 'center'
-    },
-    NFCDescription: {
-        textAlign: 'center',
-        fontSize: 15,
-        fontFamily: Fonts.FiraSans
-    },
-    NFCStatus: {
-        marginBottom: Margins.bottom.mb10,
-        textAlign: 'center',
-        fontSize: 15,
-        fontFamily: Fonts.FiraSans
-    },
-    NFCButton: {
-        color: '#22364F'
-    },
-    /* /NFC/ */
-
     /* Video */
     video: {
-        ...StyleSheet.absoluteFill
+        ...StyleSheet.absoluteFill,
     },
     videoView: {
         width,
@@ -581,7 +469,6 @@ export const styles = (props) => StyleSheet.create({
 
     /* Global */
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -593,7 +480,7 @@ export const styles = (props) => StyleSheet.create({
         position: 'absolute',
         right: 0,
         top: 3,
-        fontFamily: Fonts.FiraSans
+        fontFamily: Fonts.FiraSans,
     },
     noDataMessage: {
         color: props.theme.color,
@@ -603,12 +490,6 @@ export const styles = (props) => StyleSheet.create({
     descriptionSection: {
         alignSelf: 'center'
     },
-    descriptionText: {
-        textAlign: 'center',
-        color: props.theme.anotherTextColor,
-        fontSize: 16,
-        fontFamily: Fonts.FiraSansMedium
-    },
     imageSection: {
         alignSelf: 'center',
         marginTop: Margins.top.mt10,
@@ -616,7 +497,9 @@ export const styles = (props) => StyleSheet.create({
     },
     imageFrame: {
         borderWidth: 2,
-        borderColor: props.theme.color
+        borderColor: props.theme.color,
+        width: 365,
+        height: 600
     },
     imageFrameAppIntro: {
         borderWidth: 2,
@@ -624,11 +507,25 @@ export const styles = (props) => StyleSheet.create({
         width: 362,
         height: 578
     },
+    imageFrameContacts: {
+        borderWidth: 2,
+        borderColor: props.theme.color,
+        width: 350,
+        height: 700
+    },
     readViewValues: {
         textAlign: 'right'
     },
-    zdr: {
-        backgroundColor: '#8B93A0',
+    themeImageSection: {
+        alignSelf: 'center',
+        marginTop: Margins.top.mt10,
+        marginBottom: Margins.bottom.mb10
+    },
+    themeText: {
+        textAlign: "center",
+        color: props.theme.textColor,
+        fontSize: 15,
+        fontFamily: Fonts.FiraSansMedium,
     }
     /* /Global/ */
 });

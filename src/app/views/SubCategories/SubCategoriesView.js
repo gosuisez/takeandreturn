@@ -1,16 +1,18 @@
 /* Imports */
 import React from 'react';
 import { View, Text, Image, StatusBar, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Container, Content, ListItem, List, Fab, Header, Icon, Left, Body, Right, Title, Button } from 'native-base';
-import { AntDesign, FontAwesome } from '@app/utils/Icons';
-import {SwipeListView} from "react-native-swipe-list-view";
-import db from "@app/utils/Database";
+import { SwipeListView } from "react-native-swipe-list-view";
+import { ListItem, List, Content, Container, Header, Left, Button, Body, Title, Right, Fab, Icon } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { AntDesign, FontAwesome } from '@app/utils/Icons';
+import db from "@app/utils/Database";
 /* /Imports/ */
 
-class SubCategoriesView extends React.Component {
+class SubCategoriesView extends React.PureComponent {
+    _isMounted = false;
+
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
         super(props);
@@ -23,41 +25,42 @@ class SubCategoriesView extends React.Component {
     }
     /* /Constructor Initialize - Here Are Our States/ */
 
-    _isMounted = false;
-
-    /* Component Did Mount Method - Here Is Our Data For SubCategories */
-    componentDidMount() {
+    /* Component Data Method - Here Is Our Data For SubCategories */
+    componentData() {
         const { navigation } = this.props;
         const category_id = navigation.getParam('category_id');
+
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_subcategories WHERE category_id=' + `${category_id}`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
+                this._isMounted = true;
+
+                if (this._isMounted) {
+                    let rows = results.rows.raw();
+                    this.setState({data: rows, isLoading: false});
+                    this.arrayholder = rows;
+                }
             });
         });
     }
-    /* /Component Did Mount Method - Here Is Our Data For SubCategories/ */
+    /* /Component Data Method - Here Is Our Data For SubCategories/ */
+
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
+    }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
+
+    /* Component Did Update Method - Here We Update Component - Data */
+    componentDidUpdate() {
+        this.componentData();
+    }
+    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         this._isMounted = false;
     }
     /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
-
-    /* Component Did Update Method - Here We Update Component - Data */
-    componentDidUpdate() {
-        const { navigation } = this.props;
-        const category_id = navigation.getParam('category_id');
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_subcategories WHERE category_id=' + `${category_id}`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false });
-                this.arrayholder = rows;
-            });
-        });
-    }
-    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Handle Search Method - Navigate to SearchSubCategory */
     _handleSearch(category_id) {
@@ -246,4 +249,6 @@ class SubCategoriesView extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(SubCategoriesView);
+/* /Exports/ */

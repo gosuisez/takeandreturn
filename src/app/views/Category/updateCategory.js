@@ -1,14 +1,14 @@
 /* Imports */
 import React from 'react';
-import { View, TextInput, Text } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { View, TextInput, Text } from 'react-native';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -35,9 +35,11 @@ class updateCategory extends React.Component {
     }
     /* /Constructor Initialize - Here Are Our States/ */
 
+    /* Component Did Mount Method - Here We Apply On Button Press With Navigation */
     componentDidMount() {
         this.props.navigation.setParams({ handleRemove: this._onButtonPress });
-    }
+    };
+    /* /Component Did Mount Method - Here We Apply On Button Press With Navigation/ */
 
     /* On Button Press Method - Reset Actions */
     _onButtonPress = () => {
@@ -122,10 +124,11 @@ class updateCategory extends React.Component {
     static navigationOptions = ({ navigation, screenProps}) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Редактиране на категория",
-            headerStyle: { backgroundColor: screenProps.theme.color },
+            headerStyle: responsive.headerStyle,
             headerTitleStyle: {color: '#F5F5F5'},
             headerLeft: <AntDesign name="arrowleft" style={custom.stackNavigatorBackIcon} onPress={() => { params.handleRemove() }}/>
         };
@@ -135,15 +138,15 @@ class updateCategory extends React.Component {
     /* Render Method - Is Place Where You Can View All Content Of The Page */
     render() {
         const { category_nameError, dialogVisible, dialogAsk, dialogError } = this.state;
-        const responsive = responsives(this.props);
         const custom = styles(this.props);
+        const responsive = responsives(this.props);
 
         return (
             <Container>
-                <Content style={responsive.subCategoryForm}>
-                    <View style={responsive.subCategoryFormBox}>
+                <Content style={responsive.categoryForm}>
+                    <View style={responsive.categoryFormBoxUpdate}>
                         <Form>
-                            <View style={responsive.subCategoryFormBoxView}>
+                            <View style={responsive.categoryFormBoxView}>
                                 <View>
                                     <Label style={custom.FormLabel}>Име на категорията:</Label>
                                 </View>
@@ -177,4 +180,6 @@ class updateCategory extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(updateCategory);
+/* /Exports/ */

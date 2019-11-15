@@ -1,14 +1,14 @@
 /* Imports */
 import React from 'react';
-import { View, TextInput, Text, Picker } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { View, TextInput, Text, Picker } from 'react-native';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import validator from '@app/validation/validator';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -93,26 +93,26 @@ class createTool extends React.Component {
         });
 
         if (!tool_nameError) {
-        if (!tool_descriptionError) {
-        if (!tool_countError) {
-        if (!tool_availabilityError) {
-            const { navigation } = this.props;
-            const subcategory_id = navigation.getParam('subcategory_id');
-            db.transaction(function (tx) {
-                tx.executeSql(
-                    'INSERT INTO table_tools (subcategory_id, tool_name, tool_description, tool_count, tool_availability) VALUES (?, ?, ?, ?, ?)',
-                    [subcategory_id, tool_name, tool_description, tool_count, tool_availability], (tx, results) => {
-                        if (results.rowsAffected > 0) {
-                            that._showDialog();
-                            that.setState({disabled: true});
-                            setTimeout(()=> { that.setState({disabled: false}); }, 5000);
-                        } else {
-                            that._showError();
-                        }
-                    }
-                );
-            });
-        }}}}
+            if (!tool_descriptionError) {
+                if (!tool_countError) {
+                    if (!tool_availabilityError) {
+                        const { navigation } = this.props;
+                        const subcategory_id = navigation.getParam('subcategory_id');
+                        db.transaction(function (tx) {
+                            tx.executeSql(
+                                'INSERT INTO table_tools (subcategory_id, tool_name, tool_description, tool_count, tool_availability) VALUES (?, ?, ?, ?, ?)',
+                                [subcategory_id, tool_name, tool_description, tool_count, tool_availability], (tx, results) => {
+                                    if (results.rowsAffected > 0) {
+                                        that._showDialog();
+                                        that.setState({disabled: true});
+                                        setTimeout(()=> { that.setState({disabled: false}); }, 5000);
+                                    } else {
+                                        that._showError();
+                                    }
+                                }
+                            );
+                        });
+                    }}}}
     };
     /* /Handle Create Tool - Create New Tool/ */
 
@@ -120,11 +120,12 @@ class createTool extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Добавяне на инструмент",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -219,4 +220,6 @@ class createTool extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createTool);
+/* /Exports/ */

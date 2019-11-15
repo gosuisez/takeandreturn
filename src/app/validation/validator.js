@@ -1,8 +1,6 @@
-/* Validator */
-
 /* Imports */
-import constraints from '@app/validation/constraints';
 import validate from 'validate.js';
+import constraints from '@app/validation/constraints';
 /* /Imports/ */
 
 const validator = (field, value) => {
@@ -20,6 +18,6 @@ const validator = (field, value) => {
     return null;
 };
 
+/* Exports */
 export default validator;
-
-/* /Validator/ */
+/* /Exports/ */

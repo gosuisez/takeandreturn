@@ -1,28 +1,18 @@
 /* Imports */
 import React from 'react';
-import { Text, FlatList, View, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
-import { Container, Content, ListItem, List, Icon, Fab, Header, Body, Left, Title, Button, Right } from 'native-base';
-import { MaterialCommunityIcons } from '@app/utils/Icons';
 import { NavigationActions, StackActions } from 'react-navigation';
-import db from "@app/utils/Database";
+import { Text, FlatList, View, TouchableOpacity, StatusBar, ActivityIndicator } from 'react-native';
+import { ListItem, List, Container, Content, Header, Left, Button, Body, Title, Right, Fab, Icon } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { MaterialCommunityIcons } from '@app/utils/Icons';
+import db from "@app/utils/Database";
 console.disableYellowBox = true;
 /* /Imports/ */
 
-class WorkersView extends React.Component {
-    /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
-    static navigationOptions = (screenProps) => {
-        const custom = styles(screenProps);
-
-        return {
-            title: "Работници",
-            drawerIcon: () => (<MaterialCommunityIcons name="worker" style={custom.drawerMenuIcon}/>),
-            header: null
-        };
-    };
-    /* /Navigation Options Like (Header, Title, Menu, Icon, Style)/ */
+class WorkersView extends React.PureComponent {
+    _isMounted = false;
 
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
@@ -35,10 +25,8 @@ class WorkersView extends React.Component {
     }
     /* /Constructor Initialize - Here Are Our States/ */
 
-    _isMounted = false;
-
-    /* Component Did Mount Method - Here Is Our Data For Absences */
-    componentDidMount() {
+    /* Component Data Method - Here Is Our Data For Workers */
+    componentData() {
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_worker', [], (tx, results) => {
                 this._isMounted = true;
@@ -49,27 +37,25 @@ class WorkersView extends React.Component {
             });
         });
     }
-    /* /Component Did Mount Method - Here Is Our Data For Absences/ */
+    /* Component Data Method - Here Is Our Data For Workers */
+
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
+    }
+    /* /Component Did Mount Method - Here We Mount Component - Data/ */
+
+    /* Component Did Update Method - Here We Update Component - Data */
+    componentDidUpdate() {
+        this.componentData();
+    }
+    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Component Will Unmount Method - Here We Unmount Component - Data */
     componentWillUnmount() {
         this._isMounted = false;
     }
     /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
-
-    /* Component Did Update Method - Here We Update Component - Data */
-    componentDidUpdate() {
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_worker', [], (tx, results) => {
-                this._isMounted = true;
-                if (this._isMounted) {
-                    let rows = results.rows.raw();
-                    this.setState({ data: rows, isLoading: false });
-                }
-            });
-        });
-    }
-    /* /Component Did Update Method - Here We Update Component - Data/ */
 
     /* Handle Create Method - Navigate to CreateWorker */
     _handleCreate() {
@@ -128,7 +114,7 @@ class WorkersView extends React.Component {
         if (this.state.data.length > 0) {
             return (
                 <List style={custom.PartList}>
-                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={this._keyExtractor.bind(this)} renderItem={this._renderItem.bind(this)}/>
+                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem.bind(this)}/>
                 </List>
             );
         }
@@ -144,6 +130,18 @@ class WorkersView extends React.Component {
         }
     }
     /* /Check Data Method - Here We Check If Data Is More Than 0 Or Else Is Less Than 0/ */
+
+    /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
+    static navigationOptions = (screenProps) => {
+        const custom = styles(screenProps);
+
+        return {
+            title: "Работници",
+            drawerIcon: () => (<MaterialCommunityIcons name="worker" style={custom.drawerMenuIcon}/>),
+            header: null
+        };
+    };
+    /* /Navigation Options Like (Header, Title, Menu, Icon, Style)/ */
 
     /* Render Method - Is Place Where You Can View All Content Of The Page */
     render() {
@@ -163,7 +161,7 @@ class WorkersView extends React.Component {
                             </TouchableOpacity>
                         </Left>
                         <Body style={custom.headerBody}>
-                        <Title style={responsive.headerTitle}>Работници</Title>
+                            <Title style={responsive.headerTitle}>Работници</Title>
                         </Body>
                         <Right>
                             <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this._handleSearch()}>
@@ -193,7 +191,7 @@ class WorkersView extends React.Component {
                             </TouchableOpacity>
                         </Left>
                         <Body style={custom.headerBody}>
-                        <Title style={responsive.headerTitle}>Работници</Title>
+                            <Title style={responsive.headerTitle}>Работници</Title>
                         </Body>
                         <Right>
                             <TouchableOpacity hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }} onPress={() => this._handleSearch()}>
@@ -216,4 +214,6 @@ class WorkersView extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(WorkersView);
+/* /Exports/ */

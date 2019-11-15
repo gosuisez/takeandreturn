@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Container } from 'native-base';
-import { AntDesign } from '@app/utils/Icons';
 import slides from '@app/components/Intro/slides';
+import { AntDesign } from '@app/utils/Icons';
 /* /Imports/ */
 
-export default class AppIntro extends Component {
+class AppIntro extends Component {
     /* On Skip Method - AppIntroSlider */
     _onSkip = () => {
         this.props.navigation.navigate('Settings');
@@ -37,3 +37,7 @@ export default class AppIntro extends Component {
     }
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
+
+/* Exports */
+export default AppIntro;
+/* /Exports/ */

@@ -1,13 +1,14 @@
 /* Imports */
-import React, { Component } from 'react';
-import { ScrollView, View, FlatList, Text } from 'react-native';
+import React from 'react';
+import { View, Text, FlatList, ScrollView, ActivityIndicator } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { Container, Content, ListItem, List, Fab, Icon } from 'native-base';
+import { ListItem, Container, List, Content, Fab, Icon } from 'native-base';
 import moment from 'moment';
 import { AppHeader } from '@app/components/config';
-import { MaterialCommunityIcons } from '@app/utils/Icons';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
+import { MaterialCommunityIcons } from '@app/utils/Icons';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -21,7 +22,9 @@ LocaleConfig.locales['bg'] = {
 LocaleConfig.defaultLocale = 'bg';
 /* /Calendar LocaleConfig Month Names and Day Names/ */
 
-class ScheduleView extends Component {
+class ScheduleView extends React.PureComponent {
+    _isMounted = false;
+
     /* Constructor Initialize - Here are our states */
     constructor(props) {
         super(props);
@@ -35,7 +38,6 @@ class ScheduleView extends Component {
             date_to: moment().format('YYYY-MM-DD'),
             hour_to: moment(hour_from).format('HH:mm'),
             isLoading: true,
-            isMounted: false,
             calendarBackground: null,
         };
 
@@ -43,37 +45,40 @@ class ScheduleView extends Component {
     }
     /* /Constructor Initialize - Here are our states/ */
 
-    /* Component Did Mount Method - Here Is Our Data For Schedules */
-    componentDidMount() {
+    /* Component Data Method - Here Is Our Data For Schedules */
+    componentData() {
         const date_from = this.state.date_from;
         db.transaction((tx) => {
             tx.executeSql('SELECT * FROM table_schedule_workers INNER JOIN table_worker ON table_worker.worker_id = table_schedule_workers.worker_id  WHERE date_from="' + `${date_from}"`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false, calendarBackground: this.props.theme.backgroundColor });
-                this.arrayholder = rows;
-            })
+                this._isMounted = true;
+
+                if (this._isMounted) {
+                    let rows = results.rows.raw();
+                    this.setState({ data: rows, isLoading: false, calendarBackground: this.props.theme.backgroundColor });
+                    this.arrayholder = rows;
+                }
+            });
         });
     }
-    /* Component Did Mount Method - Here Is Our Data For Schedules */
+    /* Component Data Method - Here Is Our Data For Schedules */
 
-    /* Component Will Unmount Method - Here We Unmount Component - Data */
-    componentWillUnmount() {
-        this.state.isMounted = false;
+    /* Component Did Mount Method - Here We Mount Component - Data */
+    componentDidMount() {
+        this.componentData();
     }
-    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
+    /* Component Did Mount Method - Here We Mount Component - Data */
 
     /* Component Did Update Method - Here We Update Component - Data */
     componentDidUpdate() {
-        const date_from = this.state.date_from;
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM table_schedule_workers INNER JOIN table_worker ON table_worker.worker_id = table_schedule_workers.worker_id  WHERE date_from="' + `${date_from}"`, [], (tx, results) => {
-                let rows = results.rows.raw();
-                this.setState({ data: rows, isLoading: false, calendarBackground: this.props.theme.backgroundColor });
-                this.arrayholder = rows;
-            })
-        });
+        this.componentData();
     }
     /* /Component Did Update Method - Here We Update Component - Data/ */
+
+    /* Component Will Unmount Method - Here We Unmount Component - Data */
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+    /* /Component Will Unmount Method - Here We Unmount Component - Data/ */
 
     /* On Day Press Method - Date From And Date To */
     _onDayPress(day) {
@@ -128,20 +133,20 @@ class ScheduleView extends Component {
 
     /* Check Data Method - Here we check if data is more than 0 or else is less than 0 */
     _checkData() {
-        const custom = styles(this.props);
+        const responsive = responsives(this.props);
 
         if (this.state.data.length > 0) {
             return (
                 <List>
-                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={this._keyExtractor.bind(this)} renderItem={this._renderItem.bind(this)}/>
+                    <FlatList extraData={this.state} data={this.state.data} keyExtractor={(item, index) => index.toString()} renderItem={this._renderItem.bind(this)}/>
                 </List>
             );
         }
 
         else {
             return (
-                <Content style={custom.PartCalendar}>
-                    <Text style={custom.PartNoData}>
+                <Content style={responsive.PartCalendar}>
+                    <Text style={responsive.PartNoData}>
                         Няма добавен график на работник за този ден.
                     </Text>
                 </Content>
@@ -165,24 +170,47 @@ class ScheduleView extends Component {
     render() {
         const custom = styles(this.props);
 
-        return (
-            <Container>
-                <AppHeader title="График на работниците" drawerOpen={() => this.props.navigation.openDrawer('DrawerOpen')}/>
-                <Content style={custom.content}>
-                    <ScrollView>
-                        <Calendar style={custom.PartCalendarData} onDayPress={this._onDayPress} showWeekNumbers={false} hideExtraDays={true} markedDates={{ [this.state.date_from]: { selected: true, disableTouchEvent: true, date_fromDotColor: '#2EBEE5', selectedColor: '#2EBEE5' }}} theme={{ backgroundColor: this.state.calendarBackground, calendarBackground: this.state.calendarBackground, arrowColor: '#22364F', monthTextColor: '#22364F', dayTextColor: '#22364F', textSectionTitleColor: '#22364F' }}/>
-                        {this._checkData()}
-                    </ScrollView>
-                </Content>
-                <View>
-                    <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
-                        <Icon name="add"/>
-                    </Fab>
-                </View>
-            </Container>
-        );
+        if (this.state.isLoading === true) {
+            return (
+                <Container>
+                    <AppHeader title="График на работниците" drawerOpen={() => this.props.navigation.openDrawer('DrawerOpen')}/>
+                    <Content style={custom.content}>
+                        <ScrollView>
+                            <Calendar style={custom.PartCalendarData} onDayPress={this._onDayPress} showWeekNumbers={false} hideExtraDays={true} markedDates={{ [this.state.date_from]: { selected: true, disableTouchEvent: true, date_fromDotColor: '#2EBEE5', selectedColor: '#2EBEE5' }}} theme={{ backgroundColor: this.state.calendarBackground, calendarBackground: this.state.calendarBackground, arrowColor: '#22364F', monthTextColor: '#22364F', dayTextColor: '#22364F', textSectionTitleColor: '#22364F' }}/>
+                            <ActivityIndicator size={70} color="#243039" />
+                        </ScrollView>
+                    </Content>
+                    <View>
+                        <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
+                            <Icon name="add"/>
+                        </Fab>
+                    </View>
+                </Container>
+            );
+        }
+
+        else {
+            return (
+                <Container>
+                    <AppHeader title="График на работниците" drawerOpen={() => this.props.navigation.openDrawer('DrawerOpen')}/>
+                    <Content style={custom.content}>
+                        <ScrollView>
+                            <Calendar style={custom.PartCalendarData} onDayPress={this._onDayPress} showWeekNumbers={false} hideExtraDays={true} markedDates={{ [this.state.date_from]: { selected: true, disableTouchEvent: true, date_fromDotColor: '#2EBEE5', selectedColor: '#2EBEE5' }}} theme={{ backgroundColor: this.state.calendarBackground, calendarBackground: this.state.calendarBackground, arrowColor: '#22364F', monthTextColor: '#22364F', dayTextColor: '#22364F', textSectionTitleColor: '#22364F' }}/>
+                            {this._checkData()}
+                        </ScrollView>
+                    </Content>
+                    <View>
+                        <Fab style={custom.PartCreate} active={'true'} direction="down" position="bottomRight" onPress={() => this._handleCreate()}>
+                            <Icon name="add"/>
+                        </Fab>
+                    </View>
+                </Container>
+            );
+        }
     }
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(ScheduleView);
+/* /Exports/ */

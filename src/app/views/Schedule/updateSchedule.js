@@ -1,17 +1,16 @@
 /* Imports */
 import React, { Component } from 'react';
+import {NavigationActions} from "react-navigation";
 import { View, Text, TextInput } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
 import { AntDesign } from '@app/utils/Icons';
-import { custom } from '@app/styles/config';
 import { Button, Alert } from '@app/components/config';
 import validator from '@app/validation/validator';
-import {NavigationActions} from "react-navigation";
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import {responsives } from '@app/styles/config';
+import { styles } from '@app/styles/config';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
@@ -237,12 +236,17 @@ class updateSchedule extends Component {
   /* /Handle Update Schedule - Update Schedule/ */
 
   /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
-  static navigationOptions = ({ navigation, screenProps }) => ({
-    title: "Редактиране на график",
-    headerStyle: { backgroundColor: screenProps.theme.color },
-    headerTitleStyle: { color: '#F5F5F5' },
-    headerLeft: <AntDesign name="arrowleft" style={custom.stackNavigatorBackIcon} onPress={() => { navigation.navigate('readSchedule') }}/>
-  });
+  static navigationOptions = ({ navigation, screenProps }) => {
+      const custom = styles(screenProps);
+      const responsive = responsives(screenProps);
+
+      return {
+          title: "Редактиране на график",
+          headerStyle: responsive.headerStyle,
+          headerTitleStyle: responsive.headerTitleStyle,
+          headerLeft: <AntDesign name="arrowleft" style={custom.stackNavigatorBackIcon} onPress={() => { navigation.navigate('readSchedule') }}/>
+      };
+  };
   /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
 
   /* Render Method - Is Place Where You Can View All Content Of The Page */
@@ -255,7 +259,7 @@ class updateSchedule extends Component {
     return (
       <Container>
         <Content style={responsive.scheduleForm}>
-          <View style={responsive.scheduleFormBox}>
+          <View style={responsive.scheduleFormBoxUpdate}>
             <Form>
               <View style={responsive.scheduleFormBoxView}>
                 <View>
@@ -377,4 +381,6 @@ class updateSchedule extends Component {
   /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(updateSchedule);
+/* /Exports/ */

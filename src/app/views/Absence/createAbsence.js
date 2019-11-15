@@ -1,17 +1,17 @@
 /* Imports */
 import React, { Component } from 'react';
-import { View, Text, TextInput, Picker } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
+import { View, Text, TextInput, Picker } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Container, Content, Form, Item, Label } from 'native-base';
+import { Container, Content, Form, Label, Item } from 'native-base';
 import moment from 'moment';
-import { AntDesign } from '@app/utils/Icons';
 import { Button, Alert } from '@app/components/config';
 import validator from '@app/validation/validator';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+import { AntDesign } from '@app/utils/Icons';
 import db from "@app/utils/Database";
-import { withTheme} from '@app/theme/themeProvider';
-import {responsives} from '@app/styles/config';
-import {styles} from '@app/styles/config';
 /* /Imports/ */
 
 class createAbsence extends Component {
@@ -164,11 +164,12 @@ class createAbsence extends Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { params = {} } = navigation.state;
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Добавяне на отсъствие на работник",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { params.handleRemove() }} style={custom.headerLeft}/>
         };
     };
@@ -279,4 +280,6 @@ class createAbsence extends Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(createAbsence);
+/* /Exports/ */

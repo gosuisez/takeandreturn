@@ -82,7 +82,9 @@ const slides = [
         textStyle: intro.appIntroText,
         image: require('@app/assets/images/intro/absences.png'),
         imageStyle: intro.appIntroImage
-    },
+    }
 ];
 
+/* Exports */
 export default slides;
+/* /Exports/ */

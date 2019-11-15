@@ -1,10 +1,11 @@
 /* Imports */
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { Container, Footer, FooterTab, Button } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign, FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@app/utils/Icons';
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 /* /Imports/ */
 
 class readAbsence extends Component {
@@ -23,11 +24,12 @@ class readAbsence extends Component {
     /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
     static navigationOptions = ({ navigation, screenProps }) => {
         const custom = styles(screenProps);
+        const responsive = responsives(screenProps);
 
         return {
             title: "Преглеждане на отсъствие",
-            headerStyle: { backgroundColor: screenProps.theme.color },
-            headerTitleStyle: { color: '#F5F5F5' },
+            headerStyle: responsive.headerStyle,
+            headerTitleStyle: responsive.headerTitleStyle,
             headerLeft: <AntDesign name="arrowleft" size={24} color="#F5F5F5" onPress={() => { navigation.navigate('Absences') }} style={custom.headerLeft}/>
         };
     };
@@ -104,4 +106,6 @@ class readAbsence extends Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(readAbsence);
+/* /Exports/ */

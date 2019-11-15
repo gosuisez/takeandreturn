@@ -1,6 +1,6 @@
 /* Imports */
 import React, { Component } from 'react';
-import { Text, View, Slider, TouchableNativeFeedback } from 'react-native';
+import { View, Text, Slider, TouchableNativeFeedback } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import Video from 'react-native-video';
 import { Button } from 'react-native-elements';
@@ -9,9 +9,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Container, Content } from 'native-base';
 import { AppHeader } from '@app/components/config';
 import slides from '@app/components/Intro/slides';
-import { Entypo, AntDesign } from '@app/utils/Icons';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
+import { Entypo, AntDesign } from '@app/utils/Icons';
 /* /Imports/ */
 
 class HomeView extends Component {
@@ -40,7 +41,6 @@ class HomeView extends Component {
   };
   /* /Component Did Mount Method - Here We Save AppIntroSlider To Local Cache With AsyncStorage/ */
 
-
   /* On Skip Method - AppIntroSlider */
   _onSkip = () => {
     AsyncStorage.setItem('first_time', 'true').then(() => {
@@ -57,6 +57,7 @@ class HomeView extends Component {
   };
   /* /On Done Method - AppIntroSlider/ */
 
+  /* Handle Double Tap Method - Here We Apply Double Tap On Video Player */
   lastTap = null;
 
   handleDoubleTap = (doubleTapCallback, singleTapCallback) => {
@@ -76,7 +77,9 @@ class HomeView extends Component {
     }
 
   };
+  /* /Handle Double Tap Method - Here We Apply Double Tap On Video Player/ */
 
+  /* Get Time Method - Here We Get The Time Of The Video */
   getTime = t => {
     const digit = n => n < 10 ? `0${n}` : `${n}`;
     const sec = digit(Math.floor(t % 60));
@@ -84,28 +87,41 @@ class HomeView extends Component {
     const hr = digit(Math.floor((t / 3600) % 60));
     return hr + ':' + min + ':' + sec;
   };
+  /* /Get Time Method - Here We Get The Time Of The Video/ */
 
+  /* Load Method - Here We Get The Duration Of The Video */
   load = ({ duration }) => this.setState({ duration });
-  progress = ({ currentTime }) => this.setState({ currentTime });
+  /* /Load Method - Here We Get The Duration Of The Video/ */
 
+  /* Progress Method - Here We Get The Progress Of The Video */
+  progress = ({ currentTime }) => this.setState({ currentTime });
+  /* /Progress Method - Here We Get The Progress Of The Video/ */
+
+  /* Backward Method - Here We Apply Backward Tapping On Video Player */
   backward = () => {
     this.video.seek(this.state.currentTime - 5);
     clearTimeout(this.overlayTimer);
     this.overlayTimer = setTimeout(() => this.setState({ overlay: false }), 3000);
   };
+  /* /Backward Method - Here We Apply Backward Tapping On Video Player/ */
 
+  /* Forward Method - Here We Apply Forward Tapping On Video Player */
   forward = () => {
     this.video.seek(this.state.currentTime + 5); // here the video is seek to 5 sec forward
     clearTimeout(this.overlayTimer);
     this.overlayTimer = setTimeout(() => this.setState({ overlay: false }), 3000);
   };
+  /* /Forward Method - Here We Apply Forward Tapping On Video Player/ */
 
+  /* On Slide Method - Here We Make Our Video Seeking */
   onslide = slide => {
-    this.video.seek(slide * this.state.duration); // here the upation is maked for video seeking
+    this.video.seek(slide * this.state.duration);
     clearTimeout(this.overlayTimer);
     this.overlayTimer = setTimeout(() => this.setState({ overlay: false }), 3000);
   };
+  /* /On Slide Method - Here We Make Our Video Seeking/ */
 
+  /* Seek Left Method - Here We Apply Our Seek Left Tapping On Video Player */
   seekLeft = () => {
     const { currentTime } = this.state;
     this.handleDoubleTap(() => {
@@ -115,7 +131,9 @@ class HomeView extends Component {
       this.overlayTimer = setTimeout(() => this.setState({ overlay: false }), 3000);
     })
   };
+  /* /Seek Left Method - Here We Apply Our Seek Left Tapping On Video Player/ */
 
+  /* Seek Right Method - Here We Apply Our Seek Right Tapping On Video Player */
   seekRight = () => {
     const { currentTime } = this.state;
     this.handleDoubleTap(() => {
@@ -125,6 +143,7 @@ class HomeView extends Component {
       this.overlayTimer = setTimeout(() => this.setState({ overlay: false }), 3000);
     })
   };
+  /* /Seek Right Method - Here We Apply Our Seek Right Tapping On Video Player/ */
 
   /* Navigation Options Like (Header, Title, Menu, Icon, Style) */
   static navigationOptions = (screenProps) => {
@@ -141,13 +160,14 @@ class HomeView extends Component {
   render() {
     const { currentTime, duration, paused, overlay } = this.state;
     const custom = styles(this.props);
+    const responsive = responsives(this.props);
 
     if (this.state.showRealApp) {
       return (
           <Container>
             <AppHeader title="Начало" drawerOpen={() => this.props.navigation.openDrawer('DrawerOpen')}/>
-            <Content contentContainerStyle={custom.container} style={custom.content}>
-              <View style={custom.videoView}>
+            <Content padder={false} contentContainerStyle={custom.container} style={responsive.content}>
+              <View style={responsive.videoView}>
                 <Video paused={paused} ref={ref => this.video = ref} source={require('@app/assets/video/explainer.mp4')} style={custom.video} resizeMode='contain' onLoad={this.load} onProgress={this.progress}/>
                 <View style={custom.videoOverlay}>
                   {overlay ? <View style={custom.videoOverlayView}>
@@ -168,9 +188,9 @@ class HomeView extends Component {
                 </View>
               </View>
             </Content>
-            <Content contentContainerStyle={custom.container} style={custom.content}>
+            <Content contentContainerStyle={custom.container} style={responsive.content}>
               <View>
-                <Animatable.Text animation="zoomInUp" style={custom.homeDescriptionText}>
+                <Animatable.Text animation="zoomInUp" style={responsive.homeDescriptionText}>
                   <Text>
                     ⬆️ Информативно видео ⬆️
                     {"\n"}
@@ -186,7 +206,7 @@ class HomeView extends Component {
                   </Text>
                 </Animatable.Text>
               </View>
-              <View style={custom.homeDescriptionButton}>
+              <View style={responsive.homeDescriptionButton}>
                 <Button title="Как да използвате приложението?" buttonStyle={{ backgroundColor: '#22364F' }} onPress={() => this.props.navigation.navigate('AboutApp')}/>
               </View>
             </Content>
@@ -203,4 +223,6 @@ class HomeView extends Component {
   /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(HomeView);
+/* /Exports/ */

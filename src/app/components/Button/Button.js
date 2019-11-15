@@ -1,11 +1,12 @@
 /* Imports */
 import React from 'react';
 import { Button } from 'react-native-elements';
+import { styles } from '@app/styles/config';
 import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 import withPreventDoubleClick from '@app/utils/Constants';
-const DefaultButton = withPreventDoubleClick(Button);
 /* /Imports/ */
+
+const DefaultButton = withPreventDoubleClick(Button);
 
 const AppButton = props => {
     const custom = styles(props);
@@ -15,4 +16,6 @@ const AppButton = props => {
     );
 };
 
+/* Exports */
 export default withTheme(AppButton);
+/* /Exports/ */

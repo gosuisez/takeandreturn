@@ -1,11 +1,13 @@
+/* Imports */
 import React, { useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-
 import THEMES from '@app/theme/themes.json';
+/* /Imports/ */
 
 const STORAGE_KEY = 'THEME_ID';
 const ThemeContext = React.createContext();
 
+/* Exports */
 export const ThemeContextProvider = ({ children }) => {
   const [themeID, setThemeID] = useState();
 
@@ -46,4 +48,5 @@ export function withTheme(Component) {
   TargetComponent.navigationOptions = Component.navigationOptions;
 
   return TargetComponent;
-}
+  }
+/* /Exports/ */

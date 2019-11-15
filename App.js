@@ -1,3 +1,4 @@
+/* Imports */
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { createAppContainer } from 'react-navigation';
@@ -89,6 +90,9 @@ import {
     AboutAbsenceDelete,
     AboutSettings,
     AboutAppIntro,
+    AboutAppChangeTheme,
+    AboutAppImportData,
+    AboutAppExportData,
     AboutAppUs,
     AboutAppContacts,
     AboutAppVersion,
@@ -101,12 +105,16 @@ import {
     updateAbsence,
     deleteAbsence,
 } from './src/app/views/config';
+/* /Imports/ */
 
 export default class App extends React.Component {
+    /* Component Did Mount Method - Here We Mount Component - Splash Screen */
     componentDidMount() {
         SplashScreen.hide();
     }
+    /* /Component Did Mount Method - Here We Mount Component - Splash Screen/ */
 
+    /* Render Method - Is Place Where You Can View All Content Of The Page */
     render() {
         return (
             <ThemeContextProvider>
@@ -114,16 +122,11 @@ export default class App extends React.Component {
             </ThemeContextProvider>
         );
     }
+    /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
 const StackNavigator = createStackNavigator(
     {
-        WorkersView: { screen: WorkersView },
-        createWorker: { screen: createWorker },
-        readWorker: { screen: readWorker },
-        updateWorker: { screen: updateWorker },
-        deleteWorker: { screen: deleteWorker },
-        searchWorker: { screen: searchWorker },
         createCategory: { screen: createCategory },
         updateCategory: { screen: updateCategory },
         deleteCategory: { screen: deleteCategory },
@@ -139,9 +142,14 @@ const StackNavigator = createStackNavigator(
         searchTool: { screen: searchTool },
         createToolWorker: { screen: createToolWorker },
         readToolWorker: { screen: readToolWorker },
-        returnToolWorker: { screen: returnToolWorker },
         deleteToolWorker: { screen: deleteToolWorker },
+        returnToolWorker: { screen: returnToolWorker },
         searchToolWorker: { screen: searchToolWorker },
+        createWorker: { screen: createWorker },
+        readWorker: { screen: readWorker },
+        updateWorker: { screen: updateWorker },
+        deleteWorker: { screen: deleteWorker },
+        searchWorker: { screen: searchWorker },
         createSchedule: { screen: createSchedule },
         readSchedule: { screen: readSchedule },
         updateSchedule: { screen: updateSchedule },
@@ -150,16 +158,17 @@ const StackNavigator = createStackNavigator(
         readAbsence: { screen: readAbsence },
         updateAbsence: { screen: updateAbsence },
         deleteAbsence: { screen: deleteAbsence },
-        SubCategoriesView: { screen: SubCategoriesView },
-        AbsencesView: { screen: AbsencesView },
         CategoriesView: { screen: CategoriesView },
-        ChangeTheme: { screen: ChangeTheme },
-        AboutUs: { screen: AboutUs },
+        SubCategoriesView: { screen: SubCategoriesView },
+        WorkersView: { screen: WorkersView },
+        AbsencesView: { screen: AbsencesView },
         AppIntro: { screen: AppIntro },
-        AboutApp: { screen: AboutApp },
-        AppVersion: { screen: AppVersion },
+        ChangeTheme: { screen: ChangeTheme },
         ImportData: { screen: ImportData },
+        AboutUs: { screen: AboutUs },
         ExportData: { screen: ExportData },
+        AppVersion: { screen: AppVersion },
+        AboutApp: { screen: AboutApp },
         AboutHome: { screen: AboutHome },
         AboutCategories: { screen: AboutCategories },
         AboutCategorySearch: { screen: AboutCategorySearch },
@@ -200,13 +209,16 @@ const StackNavigator = createStackNavigator(
         AboutAbsenceUpdate: { screen: AboutAbsenceUpdate },
         AboutAbsenceDelete: { screen: AboutAbsenceDelete },
         AboutSettings: { screen: AboutSettings },
-        AboutAppVersion: { screen: AboutAppVersion },
         AboutAppIntro: { screen: AboutAppIntro },
+        AboutAppChangeTheme: { screen: AboutAppChangeTheme },
+        AboutAppImportData: { screen: AboutAppImportData },
+        AboutAppExportData: { screen: AboutAppExportData },
         AboutAppUs: { screen: AboutAppUs },
         AboutAppContacts: { screen: AboutAppContacts },
+        AboutAppVersion: { screen: AboutAppVersion }
     },
     {
-        transitionConfig: () => fadeIn(),
+        transitionConfig: () => fadeIn()
     }
 );
 
@@ -233,14 +245,11 @@ const DrawerNavigator = createDrawerNavigator(
             activeTintColor: 'transparent',
             activeBackgroundColor: '#2EBEE5',
             inactiveTintColor: 'transparent',
-            inactiveBackgroundColor: 'transparent',
-            iconContainerStyle: {
-                color: 'red'
-            }
+            inactiveBackgroundColor: 'transparent'
         },
         drawerType: 'front',
         statusBarAnimation: 'slide',
-        minSwipeDistance: 5,
+        minSwipeDistance: 5
     }
 );
 

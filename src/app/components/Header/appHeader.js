@@ -1,10 +1,10 @@
 /* Imports */
 import React from 'react';
 import { StatusBar, TouchableOpacity } from 'react-native';
-import { Header, Body, Title, Left, Button, Icon } from 'native-base';
+import { Header, Left, Button, Icon, Body, Title } from 'native-base';
+import { styles } from '@app/styles/config';
+import { responsives } from '@app/styles/config';
 import { withTheme } from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
-import {responsives} from '@app/styles/config';
 /* /Imports/ */
 
 class AppHeader extends React.Component {
@@ -32,4 +32,6 @@ class AppHeader extends React.Component {
   /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(AppHeader);
+/* /Exports/ */

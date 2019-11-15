@@ -1,16 +1,17 @@
 /* Imports */
 import React from 'react';
-import {Text, Image, View, ActivityIndicator} from 'react-native';
+import { Text, Image, View, ActivityIndicator } from 'react-native';
 import SearchBar from 'react-native-searchbar';
-import { Container, Content, ListItem, List } from 'native-base';
+import { SwipeListView } from "react-native-swipe-list-view";
+import { ListItem, List, Content, Container } from 'native-base';
+import { styles } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
 import { AntDesign, FontAwesome } from '@app/utils/Icons';
-import {SwipeListView} from "react-native-swipe-list-view";
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
 import db from "@app/utils/Database";
 /* /Imports/ */
 
 class searchCategory extends React.Component {
+    _isMounted = false;
     /* Constructor Initialize - Here Are Our States */
     constructor(props) {
         super(props);
@@ -23,7 +24,7 @@ class searchCategory extends React.Component {
         this.arrayholder = [];
     }
     /* /Constructor Initialize - Here Are Our States/ */
-    _isMounted = false;
+
     /* Component Did Mount Method - Here Is Our Data For Categories */
     componentDidMount() {
         db.transaction((tx) => {
@@ -168,7 +169,7 @@ class searchCategory extends React.Component {
                             placeholder="Търсете категория"
                             handleChangeText={text => this._handleSearch(text)}
                             backButton={<AntDesign name="arrowleft" style={custom.stackNavigatorSearchArrow} size={24} onPress={() => {this.props.navigation.navigate('Categories')}}/>}
-                            backgroundColor="#22364F"
+                            backgroundColor={this.props.theme.color}
                             textColor="#F5F5F5"
                             iconColor="#F5F5F5"
                         />
@@ -191,7 +192,7 @@ class searchCategory extends React.Component {
                             placeholder="Търсете категория"
                             handleChangeText={text => this._handleSearch(text)}
                             backButton={<AntDesign name="arrowleft" style={custom.stackNavigatorSearchArrow} size={24} onPress={() => {this.props.navigation.navigate('Categories')}}/>}
-                            backgroundColor="#22364F"
+                            backgroundColor={this.props.theme.color}
                             textColor="#F5F5F5"
                             iconColor="#F5F5F5"
                         />
@@ -204,4 +205,6 @@ class searchCategory extends React.Component {
     /* /Render Method - Is Place Where You Can View All Content Of The Page/ */
 }
 
+/* Exports */
 export default withTheme(searchCategory);
+/* /Exports/ */

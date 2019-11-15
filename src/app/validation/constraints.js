@@ -264,7 +264,7 @@ const constraints = {
             pattern: /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/,
             message: '^Въведете валидна дата на отсъствие!'
         }
-        
+
     },
     date_take: {
         presence: {
@@ -323,7 +323,8 @@ const constraints = {
         }
     },
 };
-
-export default constraints;
-
 /* /Validation Error Messages/ */
+
+/* Exports */
+export default constraints;
+/* /Exports/ */

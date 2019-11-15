@@ -1,7 +1,9 @@
+/* Imports */
 import React from 'react';
 import Dialog from "react-native-dialog";
-import { withTheme} from '@app/theme/themeProvider';
-import {styles} from '@app/styles/config';
+import { styles } from '@app/styles/config';
+import { withTheme } from '@app/theme/themeProvider';
+/* /Imports/ */
 
 const Alert = props => {
     const custom = styles(props);
@@ -10,7 +12,7 @@ const Alert = props => {
         <Dialog.Container visible={props.visible} contentStyle={custom.Alert}>
                 <Dialog.Title style={custom.AlertTitle}>{props.title}</Dialog.Title>
                 <Dialog.Description style={custom.AlertBody}>
-                        {props.body}
+                    {props.body}
                 </Dialog.Description>
                 <Dialog.Button label={props.first} color={'#F5F5F5'} onPress={props.onSubmit} />
                 <Dialog.Button label={props.second} color={'#F5F5F5'} onPress={props.onCancel} />
@@ -18,5 +20,6 @@ const Alert = props => {
     );
 };
 
+/* Exports */
 export default withTheme(Alert);
-
+/* /Exports/ */
